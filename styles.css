@@ -34,6 +34,8 @@ body {
     linear-gradient(180deg, var(--desk-2), var(--desk));
   background-attachment: fixed;
   overflow-x: hidden;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button { font: inherit; color: inherit; cursor: pointer; }
@@ -43,6 +45,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
   display: grid;
   place-items: center;
   padding: 16px;
+  /* keep clear of notches and home bars when installed full-screen */
+  padding-top: max(16px, env(safe-area-inset-top));
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
 }
 
 /* ================= Closed box file ================= */
@@ -676,7 +683,10 @@ dialog::backdrop { background: rgba(10, 8, 6, 0.6); backdrop-filter: blur(2px); 
 
 /* ---------- small screens ---------- */
 @media (max-width: 640px) {
-  .scene { padding: 12px 10px; }
+  .scene {
+    padding: max(12px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right))
+      max(12px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+  }
   .tool span { display: none; }
   .tool { padding: 0 11px; }
   .tray { padding: 16px 34px 24px 12px; }

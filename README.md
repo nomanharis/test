@@ -14,6 +14,7 @@ time to look through them.
 - **Search**: filters the box down to the matching entries.
 - **Private and offline**: everything, attachments included, is stored in your browser (IndexedDB). Nothing is uploaded.
 - **Backup**: under the `⋯` menu you can export everything to one JSON file and import it again.
+- **Installable, works offline**: add it to your phone's home screen and it opens full-screen like a native app, with or without a connection.
 
 ## Run it
 
@@ -25,6 +26,19 @@ python3 -m http.server 8000
 ```
 
 You can also host the folder on any static host, such as GitHub Pages.
+
+## Install on your phone
+
+Installing needs the app served over **HTTPS**, for example from GitHub Pages
+(Settings → Pages → deploy from your default branch). `localhost` also works for testing.
+
+- **Android (Chrome)**: open the site, then use `⋯` → **Install app** inside Box File, or Chrome's menu → *Install app*.
+- **iPhone / iPad (Safari)**: open the site, tap **Share** → **Add to Home Screen**.
+
+After the first visit, a service worker (`sw.js`) caches the app so it opens
+offline. Your entries live on that device only, so use **Export backup** now and then.
+
+When you change any app file, bump `VERSION` in `sw.js` so installed copies pick up the update.
 
 ## Keyboard
 
@@ -43,3 +57,5 @@ You can also host the folder on any static host, such as GitHub Pages.
 - `styles.css` – the box file look and the page-flip animations
 - `app.js` – rendering, page turning, editor, search, backup
 - `db.js` – a small IndexedDB wrapper for entries and attachment files
+- `sw.js` – the service worker that makes it work offline
+- `manifest.webmanifest`, `icons/` – app name, colours and home-screen icons
