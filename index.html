@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Box File</title>
+  <meta name="description" content="A personal document folder that looks and feels like a box file." />
+  <meta name="theme-color" content="#2b2622" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main id="scene" class="scene is-closed">
+    <!-- Closed box file (front cover) -->
+    <section class="box-cover" id="cover" aria-label="Closed box file">
+      <div class="cover-spine"></div>
+      <div class="cover-face">
+        <div class="cover-label">
+          <span class="label-caption">Contents</span>
+          <h1 class="label-title" id="coverTitle">My Documents</h1>
+          <span class="label-meta" id="coverMeta">0 entries</span>
+        </div>
+        <button class="finger-hole" id="openBtn" aria-label="Open box file"><span>Open</span></button>
+      </div>
+      <div class="cover-lock"></div>
+    </section>
+
+    <!-- Opened box file -->
+    <section class="box-open" id="openBox" aria-label="Open box file" hidden>
+      <header class="toolbar">
+        <button class="tool" id="closeBtn" title="Close the box file">&#x2715;<span>Close</span></button>
+        <button class="tool" id="contentsBtn" title="Go to contents (Home)">&#x2630;<span>Contents</span></button>
+        <div class="search">
+          <input id="searchInput" type="search" placeholder="Search entries…" aria-label="Search entries" />
+        </div>
+        <button class="tool primary" id="addBtn" title="Add a new entry (N)">&#xFF0B;<span>New entry</span></button>
+        <details class="menu">
+          <summary class="tool" title="More">&#x22EF;</summary>
+          <div class="menu-panel">
+            <button id="renameBtn">Rename folder</button>
+            <button id="exportBtn">Export backup</button>
+            <label class="menu-file">Import backup<input id="importInput" type="file" accept="application/json,.json" hidden /></label>
+          </div>
+        </details>
+      </header>
+
+      <div class="tray">
+        <div class="stack-wrap">
+          <div class="stack-depth" id="stackDepth"></div>
+          <div class="stack" id="stack"></div>
+          <div class="spring-clip" aria-hidden="true">
+            <div class="clip-bar"></div>
+            <div class="clip-roller"></div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="pager">
+        <button class="nav" id="prevBtn" aria-label="Previous page">&#x2039;</button>
+        <span id="pageIndicator" class="page-indicator">Contents</span>
+        <button class="nav" id="nextBtn" aria-label="Next page">&#x203A;</button>
+      </footer>
+    </section>
+  </main>
+
+  <!-- Entry editor -->
+  <dialog id="editor" class="editor">
+    <form method="dialog" id="editorForm">
+      <h2 id="editorTitle">New entry</h2>
+      <label>Title
+        <input name="title" required maxlength="140" autocomplete="off" />
+      </label>
+      <div class="row">
+        <label>Date
+          <input name="date" type="date" required />
+        </label>
+        <label>Section
+          <input name="category" list="categoryList" placeholder="e.g. Bills, Medical, Car" maxlength="40" autocomplete="off" />
+          <datalist id="categoryList"></datalist>
+        </label>
+      </div>
+      <label>Notes
+        <textarea name="notes" rows="6" placeholder="Reference numbers, reminders, details…"></textarea>
+      </label>
+      <label>Attachments
+        <input name="files" type="file" multiple />
+      </label>
+      <ul class="attach-edit" id="attachEdit"></ul>
+      <div class="editor-actions">
+        <button type="button" class="danger" id="deleteEntryBtn" hidden>Delete entry</button>
+        <span class="spacer"></span>
+        <button type="button" id="cancelEdit">Cancel</button>
+        <button type="submit" class="primary" value="save">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Image viewer -->
+  <dialog id="viewer" class="viewer">
+    <button class="viewer-close" id="viewerClose" aria-label="Close">&#x2715;</button>
+    <img id="viewerImg" alt="" />
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="db.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
