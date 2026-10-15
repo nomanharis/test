@@ -618,6 +618,30 @@
   });
   stack.addEventListener('pointercancel', () => { touchStart = null; });
 
+  // ---------- installable offline app ----------
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch((err) => console.warn('Offline mode unavailable:', err));
+    });
+  }
+
+  // Android / desktop Chrome offer an install prompt; iOS uses Share → Add to Home Screen.
+  let installPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    installPrompt = e;
+    $('#installBtn').hidden = false;
+  });
+  $('#installBtn').addEventListener('click', async () => {
+    menu.open = false;
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    await installPrompt.userChoice;
+    installPrompt = null;
+    $('#installBtn').hidden = true;
+  });
+  window.addEventListener('appinstalled', () => toast('Box File installed'));
+
   // ---------- boot ----------
   (async () => {
     try {
@@ -626,5 +650,7 @@
       toast('Storage unavailable: ' + err.message);
     }
     updateCover();
+    // Ask the browser not to evict the box when the phone runs low on space.
+    navigator.storage?.persist?.().catch(() => {});
   })();
 })();
