@@ -136,7 +136,7 @@ fun ReadScreen(passage: Passage, store: Store, onBack: () -> Unit) {
             }
         })
         self
-
+    }
 
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         if (granted) listener.start() else problem = "Please allow the microphone so the app can hear you read."
