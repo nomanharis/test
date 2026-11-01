@@ -59,3 +59,9 @@ When you change any app file, bump `VERSION` in `sw.js` so installed copies pick
 - `db.js` – a small IndexedDB wrapper for entries and attachment files
 - `sw.js` – the service worker that makes it work offline
 - `manifest.webmanifest`, `icons/` – app name, colours and home-screen icons
+
+---
+
+## Also in this repo
+
+- [`urdu-reader/`](urdu-reader/README.md) — **Urdu Parho**, an Android app that helps a child learn to read Urdu aloud: words light up as they're read, with daily scores, progress charts and photo-to-lesson OCR.
