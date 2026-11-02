@@ -12,15 +12,34 @@ android {
         applicationId = "com.nomanharis.urdureader"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        // Each GitHub build gets a higher number, so phones see it as an update.
+        val build = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 1
+        versionCode = build
+        versionName = "1.0.$build"
     }
 
+    // A fixed signing key lets every new build install over the previous one (keeping scores).
+    // CI provides it from repository secrets; without them the usual debug key is used.
+    val keystorePath = System.getenv("URDU_KEYSTORE_FILE")
+    signingConfigs {
+        create("family") {
+            if (keystorePath != null) {
+                storeFile = file(keystorePath)
+                storePassword = System.getenv("URDU_KEYSTORE_PASSWORD")
+                keyAlias = "urduparho"
+                keyPassword = System.getenv("URDU_KEYSTORE_PASSWORD")
+            }
+        }
+    }
+    val signing = if (keystorePath != null) signingConfigs.getByName("family") else signingConfigs.getByName("debug")
+
     buildTypes {
+        debug {
+            signingConfig = signing
+        }
         release {
             isMinifyEnabled = false
-            // Signed with the debug key so the APK can be side-loaded directly.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signing
         }
     }
 

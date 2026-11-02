@@ -26,6 +26,12 @@ An Android app that helps a child learn to read Urdu out loud.
 On the Android phone, open **https://github.com/nomanharis/test/releases/latest** and tap
 `urdu-parho.apk`. Allow "install unknown apps" for the browser when asked, then install.
 
+**Updates.** To let a new build install over the old one (keeping her scores), every build must
+be signed with the same key. Add two repository secrets under *Settings → Secrets and variables →
+Actions*: `URDU_KEYSTORE_BASE64` (the keystore file, base64-encoded) and `URDU_KEYSTORE_PASSWORD`
+(alias `urduparho`). Without them each build gets a new random key and has to be uninstalled
+before installing the next one.
+
 Every push that touches `urdu-reader/` runs the **Urdu Parho Android build** workflow in GitHub
 Actions, which tests the app, builds the APK and publishes it as a new release.
 
