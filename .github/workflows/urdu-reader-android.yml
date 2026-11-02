@@ -10,6 +10,9 @@ on:
       - "urdu-reader/**"
   workflow_dispatch:
 
+permissions:
+  contents: write  # lets the build publish the APK as a GitHub Release
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,3 +39,21 @@ jobs:
         with:
           name: urdu-parho-apk
           path: urdu-reader/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Rename APK
+        if: github.event_name != 'pull_request'
+        run: cp app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/urdu-parho.apk
+
+      # A release gives a direct .apk link that can be opened and installed straight from a phone.
+      - name: Publish release
+        if: github.event_name != 'pull_request'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: urdu-parho-build-${{ github.run_number }}
+          target_commitish: ${{ github.sha }}
+          name: Urdu Parho (build ${{ github.run_number }})
+          body: |
+            Open this page on the Android phone and tap **urdu-parho.apk** to download and install.
+            (Allow "install unknown apps" for your browser when asked.)
+          make_latest: true
+          files: urdu-reader/app/build/outputs/apk/debug/urdu-parho.apk

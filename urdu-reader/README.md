@@ -18,10 +18,11 @@ An Android app that helps a child learn to read Urdu out loud.
 
 ## Getting the APK
 
+On the Android phone, open **https://github.com/nomanharis/test/releases/latest** and tap
+`urdu-parho.apk`. Allow "install unknown apps" for the browser when asked, then install.
+
 Every push that touches `urdu-reader/` runs the **Urdu Parho Android build** workflow in GitHub
-Actions. Open the run, download the `urdu-parho-apk` artifact, unzip it and copy
-`app-debug.apk` to the phone. Install it (allow "install unknown apps" for the file manager when
-asked).
+Actions, which tests the app, builds the APK and publishes it as a new release.
 
 Or build it yourself with Android Studio (open the `urdu-reader` folder) or:
 
