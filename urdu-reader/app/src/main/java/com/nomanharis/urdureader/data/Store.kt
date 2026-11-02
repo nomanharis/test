@@ -11,13 +11,17 @@ import java.io.File
 import java.time.LocalDate
 import java.util.UUID
 
+enum class PassageKind { LESSON, STORY, MINE }
+
 data class Passage(
     val id: String,
     val title: String,
     val text: String,
-    val builtIn: Boolean,
+    val kind: PassageKind,
     val createdAt: Long,
-)
+) {
+    val builtIn: Boolean get() = kind != PassageKind.MINE
+}
 
 data class DayStats(
     val date: LocalDate,
@@ -36,7 +40,7 @@ class Store private constructor(context: Context) {
     private val passagesFile = AtomicFile(File(context.filesDir, "passages.json"))
     private val progressFile = AtomicFile(File(context.filesDir, "progress.json"))
 
-    private val _passages = MutableStateFlow(StarterPassages.all + loadPassages())
+    private val _passages = MutableStateFlow(StarterPassages.load(context) + loadPassages())
     val passages: StateFlow<List<Passage>> = _passages.asStateFlow()
 
     private val _days = MutableStateFlow<Map<LocalDate, DayStats>>(emptyMap())
@@ -56,7 +60,7 @@ class Store private constructor(context: Context) {
             id = UUID.randomUUID().toString(),
             title = title.ifBlank { "میرا سبق" },
             text = text.trim(),
-            builtIn = false,
+            kind = PassageKind.MINE,
             createdAt = System.currentTimeMillis(),
         )
         _passages.value = _passages.value + p
@@ -107,7 +111,7 @@ class Store private constructor(context: Context) {
         val arr = JSONArray(String(passagesFile.readFully(), Charsets.UTF_8))
         (0 until arr.length()).map { i ->
             val o = arr.getJSONObject(i)
-            Passage(o.getString("id"), o.getString("title"), o.getString("text"), false, o.optLong("createdAt"))
+            Passage(o.getString("id"), o.getString("title"), o.getString("text"), PassageKind.MINE, o.optLong("createdAt"))
         }
     }.getOrDefault(emptyList())
 

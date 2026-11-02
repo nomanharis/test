@@ -12,7 +12,12 @@ An Android app that helps a child learn to read Urdu out loud.
 - **Photo → lesson.** Press *New lesson*, take a photo of a page (or pick one from the gallery) and
   the app reads the Urdu text from it **offline**. Correct any OCR mistakes in the text box and
   save; the passage becomes a new lesson. Text can also be typed or pasted.
-- Five starter lessons: alphabet words, colours, counting, "My home", and "The thirsty crow".
+- **53 stories for around age 9** (📚 Stories tab): classic fables (Aesop, Panchatantra, Sheikh
+  Chilli, Mulla Nasruddin) and everyday stories about Eid, Ramadan, school, cricket, rain, family
+  trips, Pakistan, Quaid-e-Azam and Allama Iqbal, 70–110 words each. To add more, edit
+  `app/src/main/assets/stories.txt`: a `# title` line followed by the story text.
+- Word lessons (🔤 Words tab): alphabet words, colours, counting and "My home". Photo lessons go
+  under 📷 Mine.
 - Everything is stored on the phone. Nothing is uploaded except the audio that Android's speech
   recogniser sends to Google while listening.
 

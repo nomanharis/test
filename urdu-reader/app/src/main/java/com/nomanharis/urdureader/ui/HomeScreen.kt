@@ -20,6 +20,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -32,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,7 +43,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nomanharis.urdureader.data.Passage
+import com.nomanharis.urdureader.data.PassageKind
 import com.nomanharis.urdureader.data.Store
+import com.nomanharis.urdureader.reading.UrduText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,6 +61,8 @@ fun HomeScreen(
     val today = remember(days) { store.today() }
     val streak = remember(days) { store.streak() }
     var toDelete by remember { mutableStateOf<Passage?>(null) }
+    var tab by rememberSaveable { mutableStateOf(PassageKind.STORY) }
+    val shown = remember(passages, tab) { passages.filter { it.kind == tab } }
 
     Scaffold(
         topBar = {
@@ -90,13 +96,34 @@ fun HomeScreen(
                 TodayCard(wordsToday = today.wordsRead, starsToday = today.stars, streak = streak)
             }
             item {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf(
+                        PassageKind.STORY to "📚 Stories",
+                        PassageKind.LESSON to "🔤 Words",
+                        PassageKind.MINE to "📷 Mine",
+                    ).forEach { (kind, label) ->
+                        val count = passages.count { it.kind == kind }
+                        FilterChip(
+                            selected = tab == kind,
+                            onClick = { tab = kind },
+                            label = { Text("$label ($count)") },
+                        )
+                    }
+                }
+            }
+            item {
                 Text(
-                    "Pick a lesson and read it out loud. Words light up as you say them!",
+                    when (tab) {
+                        PassageKind.MINE ->
+                            if (shown.isEmpty()) "No photo lessons yet. Tap 📷 New lesson to add a page from a book."
+                            else "Your own lessons. Long-press one to delete it."
+                        else -> "Pick one and read it out loud. Words light up as you say them!"
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(vertical = 4.dp),
                 )
             }
-            items(passages, key = { it.id }) { p ->
+            items(shown, key = { it.id }) { p ->
                 PassageCard(
                     passage = p,
                     stars = best[p.id] ?: 0,
@@ -172,7 +199,7 @@ private fun PassageCard(passage: Passage, stars: Int, onClick: () -> Unit, onLon
                     color = Color(0xFFE0A100),
                 )
                 Text(
-                    if (passage.builtIn) "Lesson" else "My photo lesson · long-press to delete",
+                    "${remember(passage.text) { UrduText.tokenize(passage.text).size }} words",
                     fontSize = 12.sp,
                     color = Color.Gray,
                 )
