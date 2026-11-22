@@ -1,6 +1,16 @@
 (() => {
   'use strict';
 
+  // Older Android WebViews (Chrome < 86) lack replaceChildren; add it so the app runs there too.
+  for (const P of [Element.prototype, DocumentFragment.prototype]) {
+    if (!P.replaceChildren) {
+      P.replaceChildren = function (...nodes) {
+        while (this.lastChild) this.removeChild(this.lastChild);
+        this.append(...nodes);
+      };
+    }
+  }
+
   const LESSONS = window.LESSONS || [];
   const lessonById = (id) => LESSONS.find((l) => l.id === id);
   const $ = (sel, root = document) => root.querySelector(sel);

@@ -1,6 +1,6 @@
 // Offline support for Alltag B1: cache the app shell and fonts.
 // Bump VERSION whenever any shell file changes so installed copies update.
-const VERSION = 'alltagb1-v2';
+const VERSION = 'alltagb1-v3';
 const SHELL = [
   './', 'index.html', 'styles.css', 'app.js', 'lessons-1.js', 'lessons-2.js', 'android-bridge.js', 'manifest.webmanifest',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
