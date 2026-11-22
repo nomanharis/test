@@ -59,3 +59,11 @@ When you change any app file, bump `VERSION` in `sw.js` so installed copies pick
 - `db.js` – a small IndexedDB wrapper for entries and attachment files
 - `sw.js` – the service worker that makes it work offline
 - `manifest.webmanifest`, `icons/` – app name, colours and home-screen icons
+
+---
+
+## Also in this repository: Alltag B1
+
+[`deutsch/`](deutsch/) holds **Alltag B1**, a separate installable app for daily B1 German
+lessons built around real-life situations, with reading, listening, writing and speaking practice, a
+progress tracker and a camera mode. See [`deutsch/README.md`](deutsch/README.md).
