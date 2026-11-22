@@ -67,3 +67,8 @@ When you change any app file, bump `VERSION` in `sw.js` so installed copies pick
 [`deutsch/`](deutsch/) holds **Alltag B1**, a separate installable app for daily B1 German
 lessons built around real-life situations, with reading, listening, writing and speaking practice, a
 progress tracker and a camera mode. See [`deutsch/README.md`](deutsch/README.md).
+
+### Android app
+
+A signed APK of Alltag B1 is in [`releases/AlltagB1-1.0.apk`](releases/AlltagB1-1.0.apk). It installs on
+Android 7.0+ and runs offline. The native wrapper and its build script are in [`android/`](android/README.md).

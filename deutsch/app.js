@@ -985,9 +985,12 @@
         h('span', {}, 'Ihre Daten bleiben auf diesem Gerät.'),
         h('div', { class: 'row-btns' },
           h('button', { class: 'btn ghost', onclick: () => {
-            const blob = new Blob([JSON.stringify(S, null, 1)], { type: 'application/json' });
-            const a = h('a', { href: URL.createObjectURL(blob), download: `alltag-b1-${dayKey()}.json` });
-            document.put(body, a); a.click(); a.remove();
+            const json = JSON.stringify(S, null, 1);
+            const name = `alltag-b1-${dayKey()}.json`;
+            if (window.AndroidBridge) { window.AndroidBridge.saveText(name, json); return; }
+            const blob = new Blob([json], { type: 'application/json' });
+            const a = h('a', { href: URL.createObjectURL(blob), download: name });
+            document.body.append(a); a.click(); a.remove();
           } }, 'Sicherung speichern'),
           h('button', { class: 'btn ghost', onclick: () => importInput.click() }, 'Sicherung laden'),
           importInput)),
@@ -1297,7 +1300,7 @@
   updateStreakChip();
   route();
 
-  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  if ('serviceWorker' in navigator && location.protocol !== 'file:' && !window.AndroidBridge) {
     window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
   }
 })();
